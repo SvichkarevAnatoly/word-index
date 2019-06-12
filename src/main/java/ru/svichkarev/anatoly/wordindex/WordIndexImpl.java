@@ -40,6 +40,6 @@ public class WordIndexImpl implements WordIndex {
     }
 
     public Set<Integer> getIndexes4Word(String searchWord) {
-        return trie.isWord(searchWord);
+        return trie.getIndexes(searchWord);
     }
 }

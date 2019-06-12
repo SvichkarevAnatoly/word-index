@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import static java.util.Collections.singleton;
+
 /**
  * Represents a node in a Trie
  */
 class TrieNode {
 
     private HashMap<Character, TrieNode> children;
-    private String character;
     private Set<Integer> indexes;
     private boolean isWord;
 
@@ -19,16 +20,7 @@ class TrieNode {
      */
     public TrieNode() {
         children = new HashMap<>();
-        character = "";
         isWord = false;
-    }
-
-    /**
-     * Create a new TrieNode given a text String to store in it
-     */
-    public TrieNode(String text) {
-        this();
-        this.character = text;
     }
 
     /**
@@ -54,20 +46,9 @@ class TrieNode {
      * in the trie.
      */
     public TrieNode insert(Character c) {
-        if (children.containsKey(c)) {
-            return null;
-        }
-
-        TrieNode next = new TrieNode(character + c.toString());
+        TrieNode next = new TrieNode();
         children.put(c, next);
         return next;
-    }
-
-    /**
-     * Return the text string at this node
-     */
-    public String getCharacter() {
-        return character;
     }
 
     public Set<Integer> getIndexes() {
@@ -76,13 +57,21 @@ class TrieNode {
 
     /**
      * Set this node ends a word in the trie and add index in the text.
+     *
+     * @param wordIndex Index of word
      */
-    public void setEndsWord(int index) {
+    public void setEndsWord(int wordIndex) {
         isWord = true;
-        if (indexes == null) {
-            indexes = new HashSet<>();
-        }
-        indexes.add(index);
+        indexes = new HashSet<>(singleton(wordIndex));
+    }
+
+    /**
+     * Add word index to the node.
+     *
+     * @param wordIndex Index of word
+     */
+    public void addWordIndex(int wordIndex) {
+        indexes.add(wordIndex);
     }
 
     /**
@@ -95,9 +84,8 @@ class TrieNode {
     /**
      * Return the set of characters that have links from this node
      */
-    public Set<Character> getValidNextCharacters() {
+    public Set<Character> getNextCharacters() {
         return children.keySet();
     }
-
 }
 

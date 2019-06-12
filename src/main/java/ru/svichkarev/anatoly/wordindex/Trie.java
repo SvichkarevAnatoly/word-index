@@ -28,7 +28,7 @@ public class Trie {
     public boolean addWord(String word, int wordIndex) {
         TrieNode currentNode = this.root;
         for (char c : word.toCharArray()) {
-            if (currentNode.getValidNextCharacters().contains(c)) {
+            if (currentNode.getNextCharacters().contains(c)) {
                 currentNode = currentNode.getChild(c);
             } else {
                 currentNode = currentNode.insert(c);
@@ -37,9 +37,10 @@ public class Trie {
         if (!currentNode.endsWord()) {
             currentNode.setEndsWord(wordIndex);
             return true;
+        } else {
+            currentNode.addWordIndex(wordIndex);
+            return false;
         }
-
-        return false;
     }
 
     /**
@@ -48,10 +49,10 @@ public class Trie {
      *
      * @return Set of positions of search word in the file.
      */
-    public Set<Integer> isWord(String word) {
+    public Set<Integer> getIndexes(String word) {
         TrieNode currentNode = this.root;
         for (char c : word.toCharArray()) {
-            if (currentNode.getValidNextCharacters().contains(c)) {
+            if (currentNode.getNextCharacters().contains(c)) {
                 currentNode = currentNode.getChild(c);
             } else {
                 return null;
@@ -62,26 +63,5 @@ public class Trie {
             return null;
         }
         return currentNode.getIndexes();
-    }
-
-    // For debugging
-    public void printTree() {
-        printNode(root);
-    }
-
-    /**
-     * Do a pre-order traversal from this node down
-     */
-    public void printNode(TrieNode curr) {
-        if (curr == null)
-            return;
-
-        System.out.println(curr.getCharacter());
-
-        TrieNode next = null;
-        for (Character c : curr.getValidNextCharacters()) {
-            next = curr.getChild(c);
-            printNode(next);
-        }
     }
 }
